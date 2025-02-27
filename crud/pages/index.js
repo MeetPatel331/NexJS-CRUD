@@ -1,4 +1,4 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 
 export default function home() {
@@ -25,7 +25,7 @@ export default function home() {
             </button>
             <button
               className="p-2 mt-2 text-black hover:bg-gray-300 transition-all rounded-md bg-gray-200"
-              onClick={() => route.replace('/items')}
+              onClick={() => route.replace('/items ')}
             >
               Dashboard
             </button>

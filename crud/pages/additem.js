@@ -6,13 +6,17 @@ export default function additems() {
     const route = useRouter()
     const [data, setdata] = useState({})
     const [error, setError] = useState('')
+    const [loading, setloading] = useState(false)
     const handleSubmit = (e) => {
         e.preventDefault()
+        setloading(true)
         axios.post('/api/items', data).then((res) => {
             console.log(res.data)
             route.replace('/items')
+            setloading(false)
         }).catch((err) => {
             setError(err.response.data.message)
+            setloading(false)
         })
     }
     const handleChange = (e) => {
@@ -31,7 +35,9 @@ export default function additems() {
             {
                 error ? <span className="text-red-500 w-100 text-center mb-5">{error}</span> : ''
             }
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 block mx-auto w-full">Submit</button>
+            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm  sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 block mx-auto w-full">{
+                loading ? 'Loading...' : 'Submit'
+            }</button>
         </form>
     )
 }

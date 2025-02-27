@@ -2,7 +2,7 @@ import connectDB from "@/lib/mongodb";
 import users from "@/models/users";
 const bcrypt = require('bcryptjs')
 
-export default async function sign(req) {
+export default async function sign(req, res) {
     await connectDB()
     if (req.method === 'POST') {
         const { name, email, password } = req.body

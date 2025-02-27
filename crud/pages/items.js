@@ -1,45 +1,40 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-export default function Item() {
+export async function getServerSideProps() {
+    try {
+        const res = await axios.get("http://localhost:3000/api/items");
+        return { props: { items: res.data } };
+    } catch (error) {
+        console.error("Error fetching items:", error);
+        return { props: { items: [] } };
+    }
+}
+
+export default function Item({ items }) {
     const router = useRouter();
-    const { data: session, status } = useSession();
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { data: session } = useSession();
     const [editFormIndex, setEditFormIndex] = useState(null);
+    const [loading, setloading] = useState(false)
     const [editData, setEditData] = useState({ name: "", price: "", _id: "" });
-
-    useEffect(() => {
-        if (status === "authenticated") {
-            fetchData();
-        }
-    }, [status]);
-
-    const fetchData = async () => {
-        try {
-            const res = await fetch('/api/items');
-            const info = await res.json();
-            setData(info);
-        } catch (err) {
-            console.error("Error fetching data:", err);
-        }
-        setLoading(false);
-    };
 
     const handleRemove = async (id) => {
         try {
+            setloading(true)
             await axios.delete(`/api/items/?id=${id}`);
-            fetchData(); // Refresh items after deletion
+            router.replace(router.asPath);
+            setloading(false)
         } catch (err) {
             console.error("Error removing item:", err);
+            setloading(false)
         }
     };
 
     const handleEditClick = (item, index) => {
         setEditFormIndex(index);
-        setEditData({ name: item.name, price: item.price, _id: item._id }); // Initialize form with existing item data
+        setEditData({ name: item.name, price: item.price, _id: item._id });
     };
 
     const handleEditDataChange = (e) => {
@@ -48,16 +43,17 @@ export default function Item() {
 
     const handleUpdate = async (e) => {
         e.preventDefault();
+        setloading(true)
         try {
-            await axios.put(`/api/items`, editData); // Send the update request
-            fetchData(); // Refresh the data
-            setEditFormIndex(null); // Close edit form
+            await axios.put(`/api/items`, editData);
+            router.replace(router.asPath); // Refresh page after update
+            setEditFormIndex(null);
+            setloading(false)
         } catch (err) {
             console.error("Error updating item:", err);
+            setloading(false)
         }
     };
-
-    if (loading) return <p>Loading...</p>;
 
     return (
         <div className="grid place-content-center h-screen bg-gray-50 p-6">
@@ -78,8 +74,8 @@ export default function Item() {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.length > 0 ? (
-                                data.map((item, index) => (
+                            {items.length > 0 ? (
+                                items.map((item, index) => (
                                     <tr key={item._id} className="bg-white border-b hover:bg-gray-50">
                                         <td className="px-6 py-4 font-medium text-gray-900">{item.name}</td>
                                         <td className="px-6 py-4">${item.price}</td>
@@ -148,7 +144,9 @@ export default function Item() {
                                         type="submit"
                                         className="bg-blue-500 text-white px-4 py-2 rounded"
                                     >
-                                        Update
+                                        {
+                                            loading ? 'Loading...' : 'Update'
+                                        }
                                     </button>
                                 </div>
                             </form>
