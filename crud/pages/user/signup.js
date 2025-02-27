@@ -31,7 +31,7 @@ export default function signup() {
             }
             else {
                 setloading(false)
-                SetError(res.json().data.message)
+                SetError(res)
             }
         }
         catch (err) {

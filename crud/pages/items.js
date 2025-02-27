@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export async function getServerSideProps() {
     try {
-        const res = await axios.get("http://localhost:3000/api/items");
+        const res = await axios.get("/api/items");
         return { props: { items: res.data } };
     } catch (error) {
         console.error("Error fetching items:", error);
@@ -46,7 +46,7 @@ export default function Item({ items }) {
         setloading(true)
         try {
             await axios.put(`/api/items`, editData);
-            router.replace(router.asPath); // Refresh page after update
+            router.replace(router.asPath);
             setEditFormIndex(null);
             setloading(false)
         } catch (err) {
