@@ -6,6 +6,7 @@ export default async function sign(req, res) {
     await connectDB()
     if (req.method === 'POST') {
         const { name, email, password } = req.body
+        console.log(req.body)
         if (!name || !email || !password) {
             return res.status(400).json({ message: "Enter all values" })
         }

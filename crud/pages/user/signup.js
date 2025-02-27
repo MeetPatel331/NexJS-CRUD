@@ -35,7 +35,8 @@ export default function signup() {
             }
         }
         catch (err) {
-            SetError("Somethin went wrong")
+            console.log(err)
+            SetError("Something went wrong")
             setloading(false)
         }
     }
