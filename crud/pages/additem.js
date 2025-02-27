@@ -10,7 +10,7 @@ export default function additems() {
     const handleSubmit = (e) => {
         e.preventDefault()
         setloading(true)
-        axios.post('/api/items', data).then((res) => {
+        axios.post('https://next-js-crud-nine-nu.vercel.app/api/items', data).then((res) => {
             console.log(res.data)
             route.replace('/items')
             setloading(false)

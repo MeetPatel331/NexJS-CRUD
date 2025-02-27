@@ -18,7 +18,7 @@ export default function signup() {
         e.preventDefault()
         setloading(true)
         try {
-            const res = await fetch('/api/auth/signup', {
+            const res = await fetch('https://next-js-crud-nine-nu.vercel.app/api/auth/signup', {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {

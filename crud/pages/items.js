@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export async function getServerSideProps() {
     try {
-        const res = await axios.get("/api/items");
+        const res = await axios.get("https://next-js-crud-nine-nu.vercel.app/api/items");
         return { props: { items: res.data } };
     } catch (error) {
         console.error("Error fetching items:", error);
@@ -23,7 +23,7 @@ export default function Item({ items }) {
     const handleRemove = async (id) => {
         try {
             setloading(true)
-            await axios.delete(`/api/items/?id=${id}`);
+            await axios.delete(`https://next-js-crud-nine-nu.vercel.app/api/items/?id=${id}`);
             router.replace(router.asPath);
             setloading(false)
         } catch (err) {
@@ -45,7 +45,7 @@ export default function Item({ items }) {
         e.preventDefault();
         setloading(true)
         try {
-            await axios.put(`/api/items`, editData);
+            await axios.put(`https://next-js-crud-nine-nu.vercel.app/api/items`, editData);
             router.replace(router.asPath);
             setEditFormIndex(null);
             setloading(false)
